@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가계부 관리</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>2024년 7월 24일, 오늘 나의 소비는?</h2>
+        
+        <!-- 달력 부분 -->
+        <section id="calendar-section">
+            <div id="calendar"></div>
+        </section>
+        
+        <!-- 수입/지출 내역 데이터 입력 부분 -->
+        <section id="entry-form-section">
+            <form id="entry-form">
+                <div class="form-group">
+                    <label for="type">수입 / 지출</label>
+                    <select id="type" required>
+                        <option value="income">수입</option>
+                        <option value="expense">지출</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">내역</label>
+                    <input type="text" id="description" placeholder="내용 입력" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">금액</label>
+                    <input type="number" id="amount" placeholder="금액 입력" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">날짜</label>
+                    <input type="date" id="date" required>
+                </div>
+                <button type="submit">추가</button>
+            </form>
+        </section>
+        
+        <!-- 수입/지출 내역 조회 부분 -->
+        <section id="entries-table-section">
+            <table id="entries-table">
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>종류</th>
+                        <th>설명</th>
+                        <th>금액</th>
+                        <th>액션</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 데이터리스트 -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+    <script src="app.js"></script>
+</body>
+</html> 
