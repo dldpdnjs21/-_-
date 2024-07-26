@@ -14,7 +14,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
+    width: 70%;
     max-width: 800px;
     margin-top: 20px;
 }
@@ -26,6 +26,16 @@ h2 {
 
 section {
     margin-bottom: 30px;
+}
+
+#totals-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.total-item {
+    text-align: center;
 }
 
 #calendar-section {

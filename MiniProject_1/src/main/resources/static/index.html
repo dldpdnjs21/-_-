@@ -8,15 +8,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h2>2024년 7월 24일, 오늘 나의 소비는?</h2>
-        <h3>총 소비 금액: <span id="total-amount">0</span>원</h3>
+	<div class="container">
+		<h2 id="today-date"></h2>
         
-        <!-- 달력 부분 -->
-        <section id="calendar-section">
-            <div id="calendar"></div>
-        </section>
-        
+        <div id="totals-container">
+            <div class="total-item">
+                <h3>수입</h3>
+                <span id="total-income">0</span>원
+            </div>
+            <div class="total-item">
+                <h3>지출</h3>
+                <span id="total-expense">0</span>원
+            </div>
+            <div class="total-item">
+                <h3>총 소비 금액</h3>
+                <span id="net-amount"></span>원
+            </div>
+        </div>
+		
         <!-- 수입/지출 내역 데이터 입력 부분 -->
         <section id="entry-form-section">
             <form id="entry-form">
@@ -39,10 +48,11 @@
                     <label for="date">날짜</label>
                     <input type="date" id="date" required>
                 </div>
-                <button type="submit">추가</button>
+                <div class="form-group">
+                    <button type="submit">등록</button>
+                </div>
             </form>
-        </section>
-        
+		</section>
         <!-- 수입/지출 내역 조회 부분 -->
         <section id="entries-table-section">
             <table id="entries-table">
@@ -68,8 +78,17 @@
                 </tbody>
             </table>
         </section>
+
+
+        <!-- 달력 부분 -->
+        <section id="calendar-section">
+            <div id="calendar"></div>
+        </section>
     </div>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
-    <script src="app.js"></script>
-</body>
+    <script src="app.js" type="module"></script>
+	<script src="ui.js" type="module"></script>
+	<script src="calendar.js" type="module"></script>
+	<script src="eventHandlers.js" type="module"></script>
+	</body>
 </html>
