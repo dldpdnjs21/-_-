@@ -134,3 +134,13 @@ td {
     background-color: #4CAF50;
     border: none;
 }
+
+.income-amount {
+    color: green;
+    font-weight: bold;
+}
+
+.expense-amount {
+    color: red;
+    font-weight: bold;
+}

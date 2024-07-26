@@ -10,6 +10,7 @@
 <body>
     <div class="container">
         <h2>2024년 7월 24일, 오늘 나의 소비는?</h2>
+        <h3>총 소비 금액: <span id="total-amount">0</span>원</h3>
         
         <!-- 달력 부분 -->
         <section id="calendar-section">
@@ -47,11 +48,19 @@
             <table id="entries-table">
                 <thead>
                     <tr>
-                        <th>날짜</th>
+                        <th>
+                            날짜 
+                            <button id="sort-date-asc">▲</button>
+                            <button id="sort-date-desc">▼</button>
+                        </th>
                         <th>종류</th>
                         <th>설명</th>
-                        <th>금액</th>
-                        <th>액션</th>
+                        <th>
+                            금액 
+                            <button id="sort-amount-asc">▲</button>
+                            <button id="sort-amount-desc">▼</button>
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,4 +72,4 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
     <script src="app.js"></script>
 </body>
-</html> 
+</html>

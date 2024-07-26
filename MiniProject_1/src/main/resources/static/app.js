@@ -2,24 +2,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('entry-form');
     const entriesTableBody = document.querySelector('#entries-table tbody');
     const calendarEl = document.getElementById('calendar');
+    const totalAmountEl = document.getElementById('total-amount');
 
     const fetchEntries = async (date = null) => {
         const response = await fetch('/api/entries');
         const entries = await response.json();
         entriesTableBody.innerHTML = '';
+        let totalAmount = 0;
+
         entries.forEach(entry => {
             if (!date || entry.date === date) {
                 const row = document.createElement('tr');
+                const amount = entry.type === 'income' ? entry.amount : -entry.amount;
+                const amountClass = entry.type === 'income' ? 'income-amount' : 'expense-amount';
+                const amountDisplay = `${entry.type === 'income' ? '+' : '-'}${Math.abs(amount).toLocaleString()}원`;
+                
                 row.innerHTML = `
                     <td>${entry.date}</td>
                     <td>${entry.type === 'income' ? '수입' : '지출'}</td>
                     <td>${entry.description}</td>
-                    <td>${entry.amount}원</td>
+                    <td class="${amountClass}">${amountDisplay}</td>
                     <td><button data-id="${entry.id}" class="delete-btn">삭제</button></td>
                 `;
                 entriesTableBody.appendChild(row);
+                
+                totalAmount += amount;
             }
         });
+
+        totalAmountEl.textContent = totalAmount.toLocaleString();
 
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', async (event) => {
@@ -58,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/entries');
             const entries = await response.json();
             const events = entries.map(entry => ({
-                title: `${entry.type === 'income' ? '수입' : '지출'}: ${entry.description} - ${entry.amount}원`,
+                title: `${entry.type === 'income' ? '+' : '-' }${entry.amount}원`,
                 start: entry.date
             }));
             successCallback(events);
