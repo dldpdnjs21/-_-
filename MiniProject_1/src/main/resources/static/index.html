@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div class="container">
-		<h2 id="today-date"></h2>
+    <div class="container">
+        <h2 id="today-date"></h2>
         
         <div id="totals-container">
             <div class="total-item">
@@ -25,8 +25,7 @@
                 <span id="net-amount"></span>원
             </div>
         </div>
-		
-        <!-- 수입/지출 내역 데이터 입력 부분 -->
+        
         <section id="entry-form-section">
             <form id="entry-form">
                 <div class="form-group">
@@ -52,8 +51,8 @@
                     <button type="submit">등록</button>
                 </div>
             </form>
-		</section>
-        <!-- 수입/지출 내역 조회 부분 -->
+        </section>
+
         <section id="entries-table-section">
             <table id="entries-table">
                 <thead>
@@ -79,16 +78,11 @@
             </table>
         </section>
 
-
-        <!-- 달력 부분 -->
         <section id="calendar-section">
             <div id="calendar"></div>
         </section>
     </div>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
-    <script src="app.js" type="module"></script>
-	<script src="ui.js" type="module"></script>
-	<script src="calendar.js" type="module"></script>
-	<script src="eventHandlers.js" type="module"></script>
-	</body>
+    <script type="module" src="app.js"></script>
+</body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가계부 관리</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h2 id="today-date"></h2>
+        
+        <div id="totals-container">
+            <div class="total-item">
+                <h3>수입</h3>
+                <span id="total-income">0</span>원
+            </div>
+            <div class="total-item">
+                <h3>지출</h3>
+                <span id="total-expense">0</span>원
+            </div>
+            <div class="total-item">
+                <h3>총 소비 금액</h3>
+                <span id="net-amount"></span>원
+            </div>
+        </div>
+		
+   
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+    <script src="app.js" type="module"></script>
+	<script src="ui.js" type="module"></script>
+	<script src="calendar.js" type="module"></script>
+	<script src="eventHandlers.js" type="module"></script>
+	</body>
+</html>

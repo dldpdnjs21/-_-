@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
+    background-color: rgb(111, 132, 115);
     margin: 0;
     padding: 0;
     display: flex;
@@ -145,6 +145,15 @@ td {
     border: none;
 }
 
+.fc-event-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
 .income-amount {
     color: green;
     font-weight: bold;
@@ -153,4 +162,34 @@ td {
 .expense-amount {
     color: red;
     font-weight: bold;
+}
+
+.update-form-container {
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.update-form-container.visible {
+    display: table-row;
+}
+
+.update-form {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.update-form input, .update-form select {
+    width: 20%;
+    margin: 5px;
+    padding: 5px;
+}
+
+.update-form .close-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #333333;
 }
