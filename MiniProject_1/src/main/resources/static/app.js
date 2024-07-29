@@ -1,16 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
     setTodayDate();
-    const entries = await fetchEntries();
+    let entries = await fetchEntries();
     renderEntries(entries);
-    renderTotals(entries);
     initCalendar(entries);
     setupEventHandlers(entries);
 });
 
 async function fetchEntries() {
     const response = await fetch('/api/entries');
-    const entries = await response.json();
-    return entries;
+    return await response.json();
 }
 
 async function addEntry(entry) {
@@ -36,21 +34,26 @@ async function updateEntry(id, entry) {
 }
 
 async function deleteEntry(id) {
-    await fetch(`/api/entries/${id}`, {
-        method: 'DELETE',
-    });
+    await fetch(`/api/entries/${id}`, { method: 'DELETE' });
 }
 
 function setTodayDate() {
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    const todayDateEl = document.getElementById('today-date');
-    todayDateEl.textContent = `${formattedDate}, 오늘 나의 소비는?`;
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('today-date').textContent = `${today}, 오늘 나의 소비는?`;
 }
 
-function renderEntries(entries, date = null) {
+function renderEntries(entries, date = null, sortBy = 'date', sortOrder = 'asc') {
     const entriesTableBody = document.querySelector('#entries-table tbody');
     entriesTableBody.innerHTML = '';
+
+    entries.sort((a, b) => {
+        if (sortBy === 'date') {
+            return sortOrder === 'asc' ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date);
+        } else if (sortBy === 'amount') {
+            return sortOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount;
+        }
+    });
+
     entries.forEach(entry => {
         if (!date || entry.date === date) {
             const row = document.createElement('tr');
@@ -58,10 +61,12 @@ function renderEntries(entries, date = null) {
                 <td>${entry.date}</td>
                 <td>${entry.type === 'income' ? '수입' : '지출'}</td>
                 <td>${entry.description}</td>
-                <td class="${entry.type === 'income' ? 'income-amount' : 'expense-amount'}">${entry.type === 'income' ? '+' : '-'}${entry.amount}원</td>
+                <td class="${entry.type === 'income' ? 'income-amount' : 'expense-amount'}">
+                    ${entry.type === 'income' ? '+' : '-'}${entry.amount}원
+                </td>
                 <td>
-                    <button data-id="${entry.id}" class="update-btn">수정</button>
-                    <button data-id="${entry.id}" class="delete-btn">삭제</button>
+                    <button data-id="${entry.id}" class="update-btn btn-edit">수정</button>
+                    <button data-id="${entry.id}" class="delete-btn btn-delete">삭제</button>
                 </td>
             `;
             entriesTableBody.appendChild(row);
@@ -79,8 +84,7 @@ function renderEntries(entries, date = null) {
                         </select>
                         <input type="text" value="${entry.description}">
                         <input type="number" value="${entry.amount}">
-                        <button type="submit">저장</button>
-                        <button type="button" class="close-btn">✕</button>
+                        <button type="submit" class="btn-update"><i class="fas fa-save"></i></button>
                     </form>
                 </td>
             `;
@@ -89,14 +93,22 @@ function renderEntries(entries, date = null) {
     });
 }
 
-function renderTotals(entries) {
-    const totalIncome = entries.filter(entry => entry.type === 'income').reduce((sum, entry) => sum + entry.amount, 0);
-    const totalExpense = entries.filter(entry => entry.type === 'expense').reduce((sum, entry) => sum + entry.amount, 0);
-    const netAmount = totalIncome - totalExpense;
+function renderMonthSummary(entries, startDate, endDate) {
+    const monthlyIncome = entries.filter(entry => entry.type === 'income' &&
+        new Date(entry.date) >= startDate &&
+        new Date(entry.date) <= endDate)
+        .reduce((sum, entry) => sum + entry.amount, 0);
 
-    document.getElementById('total-income').textContent = totalIncome.toLocaleString();
-    document.getElementById('total-expense').textContent = totalExpense.toLocaleString();
-    document.getElementById('net-amount').textContent = netAmount.toLocaleString();
+    const monthlyExpense = entries.filter(entry => entry.type === 'expense' &&
+        new Date(entry.date) >= startDate &&
+        new Date(entry.date) <= endDate)
+        .reduce((sum, entry) => sum + entry.amount, 0);
+
+    const netMonth = monthlyIncome - monthlyExpense;
+
+    document.getElementById('month-income').textContent = monthlyIncome.toLocaleString();
+    document.getElementById('month-expense').textContent = monthlyExpense.toLocaleString();
+    document.getElementById('month-net').textContent = netMonth.toLocaleString();
 }
 
 function initCalendar(entries) {
@@ -105,10 +117,16 @@ function initCalendar(entries) {
         initialView: 'dayGridMonth',
         locale: 'ko',
         events: entries.map(entry => ({
-            title: `${entry.type === 'income' ? '수입' : '지출'}: ${entry.amount}원`,
+            title: `${entry.type === 'income' ? '+' : '-'} ${entry.amount}원`,
             start: entry.date,
             color: entry.type === 'income' ? 'green' : 'red'
-        }))
+        })),
+        datesSet: (info) => {
+            const startDate = new Date(info.view.currentStart);
+            const endDate = new Date(info.view.currentEnd);
+            endDate.setDate(endDate.getDate() - 1);
+            renderMonthSummary(entries, startDate, endDate);
+        }
     });
     calendar.render();
 }
@@ -125,26 +143,23 @@ function setupEventHandlers(entries) {
         const savedEntry = await addEntry(newEntry);
         entries.push(savedEntry);
         renderEntries(entries);
-        renderTotals(entries);
         initCalendar(entries);
     });
 
     document.querySelector('#entries-table').addEventListener('click', async (event) => {
-        if (event.target.classList.contains('delete-btn')) {
-            const id = event.target.dataset.id;
+        const button = event.target.closest('button');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        if (button.classList.contains('delete-btn')) {
             await deleteEntry(id);
-            const entryIndex = entries.findIndex(entry => entry.id == id);
-            entries.splice(entryIndex, 1);
+            entries = entries.filter(entry => entry.id != id);
             renderEntries(entries);
-            renderTotals(entries);
             initCalendar(entries);
-        } else if (event.target.classList.contains('update-btn')) {
-            const id = event.target.dataset.id;
-            const updateFormContainer = document.querySelector(`.update-form-container[data-id="${id}"]`);
-            updateFormContainer.classList.toggle('visible');
-        } else if (event.target.classList.contains('close-btn')) {
-            const updateFormContainer = event.target.closest('.update-form-container');
-            updateFormContainer.classList.remove('visible');
+        } else if (button.classList.contains('update-btn')) {
+            document.querySelector(`.update-form-container[data-id="${id}"]`).classList.toggle('visible');
+        } else if (button.classList.contains('close-btn')) {
+            document.querySelector(`.update-form-container[data-id="${id}"]`).classList.remove('visible');
         }
     });
 
@@ -160,11 +175,26 @@ function setupEventHandlers(entries) {
                 amount: parseInt(event.target.querySelector('input[type="number"]').value)
             };
             const updated = await updateEntry(id, updatedEntry);
-            const entryIndex = entries.findIndex(entry => entry.id == id);
-            entries[entryIndex] = updated;
+            const index = entries.findIndex(entry => entry.id == id);
+            entries[index] = updated;
             renderEntries(entries);
-            renderTotals(entries);
             initCalendar(entries);
         }
+    });
+
+    document.getElementById('sort-date-asc').addEventListener('click', () => {
+        renderEntries(entries, null, 'date', 'asc');
+    });
+
+    document.getElementById('sort-date-desc').addEventListener('click', () => {
+        renderEntries(entries, null, 'date', 'desc');
+    });
+
+    document.getElementById('sort-amount-asc').addEventListener('click', () => {
+        renderEntries(entries, null, 'amount', 'asc');
+    });
+
+    document.getElementById('sort-amount-desc').addEventListener('click', () => {
+        renderEntries(entries, null, 'amount', 'desc');
     });
 }

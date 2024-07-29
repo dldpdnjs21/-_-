@@ -1,33 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>가계부 관리</title>
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h2 id="today-date"></h2>
         
-        <div id="totals-container">
-            <div class="total-item">
-                <h3>수입</h3>
-                <span id="total-income">0</span>원
-            </div>
-            <div class="total-item">
-                <h3>지출</h3>
-                <span id="total-expense">0</span>원
-            </div>
-            <div class="total-item">
-                <h3>총 소비 금액</h3>
-                <span id="net-amount"></span>원
-            </div>
-        </div>
-        
         <section id="entry-form-section">
-            <form id="entry-form">
+            <form id="entry-form" aria-labelledby="entry-form-label">
+                <h3 id="entry-form-label">당신의 소비 내역을 입력해주세요</h3>
                 <div class="form-group">
                     <label for="type">수입 / 지출</label>
                     <select id="type" required>
@@ -48,41 +35,55 @@
                     <input type="date" id="date" required>
                 </div>
                 <div class="form-group">
-                    <button type="submit">등록</button>
+                    <button type="submit" class="btn btn-add"><i class="fas fa-plus"></i> 등록</button>
                 </div>
             </form>
         </section>
-
+		
+        
         <section id="entries-table-section">
             <table id="entries-table">
                 <thead>
                     <tr>
-                        <th>
-                            날짜 
-                            <button id="sort-date-asc">▲</button>
-                            <button id="sort-date-desc">▼</button>
-                        </th>
+                        <th>날짜 <button class="sort-btn" id="sort-date-asc">▲</button><button class="sort-btn" id="sort-date-desc">▼</button></th>
                         <th>종류</th>
                         <th>설명</th>
-                        <th>
-                            금액 
-                            <button id="sort-amount-asc">▲</button>
-                            <button id="sort-amount-desc">▼</button>
-                        </th>
+                        <th>금액 <button class="sort-btn" id="sort-amount-asc">▲</button><button class="sort-btn" id="sort-amount-desc">▼</button></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 데이터리스트 -->
+                    <!-- 데이터 리스트 -->
                 </tbody>
             </table>
         </section>
-
+		
+		<div id="summary-container">
+		    <div id="monthly-summary">
+		        <h3>월별 소비내역</h3>
+		        <div id="monthly-summary-content">
+		            <div class="summary-item">
+		                <h4>총 수입</h4>
+		                <p id="month-income" class="amount positive">0원</p>
+		            </div>
+		            <div class="summary-item">
+		                <h4>총 지출</h4>
+		                <p id="month-expense" class="amount negative">0원</p>
+		            </div>
+		            <div class="summary-item">
+		                <h4>총 소비 금액</h4>
+		                <p id="month-net" class="amount">0원</p>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+        
         <section id="calendar-section">
             <div id="calendar"></div>
         </section>
     </div>
+	
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
-    <script type="module" src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
