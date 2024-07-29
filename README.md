@@ -25,25 +25,24 @@
 ##디렉토리 구조
 
 ```bash
-├── src
-│   │   │   │   ├── main
-│   │   │   │   │   ├── java
-│   │   │   │   │   │   └── com
-│   │   │   │   │   │       └── ureca
-│   │   │   │   │   │           └── expensemanager
-│   │   │   │   │   │               ├── ExpenseManagerApplication.java
-│   │   │   │   │   │               ├── controller
-│   │   │   │   │   │               │   ├── ExpenseController.java
-│   │   │   │   │   │               │   └── HomeController.java
-│   │   │   │   │   │               ├── model
-│   │   │   │   │   │               │   └── Expense.java
-│   │   │   │   │   │               ├── repository
-│   │   │   │   │   │               │   └── ExpenseRepository.java
-│   │   │   │   │   │               └── service
-│   │   │   │   │   │                   └── ExpenseService.java
-│   │   │   │   │   └── resources
-│   │   │   │   │       ├── application.properties
-│   │   │   │   │       ├── static
-│   │   │   │   │       │   ├── app.js
-│   │   │   │   │       │   ├── index.html
-│   │   │   │   │       │   └── style.css
+main
+│   ├── java
+│   │   └── com
+│   │       └── ureca
+│   │           └── expensemanager
+│   │               ├── ExpenseManagerApplication.java
+│   │               ├── controller
+│   │               │   ├── ExpenseController.java
+│   │               │   └── HomeController.java
+│   │               ├── model
+│   │               │   └── Expense.java
+│   │               ├── repository
+│   │               │   └── ExpenseRepository.java
+│   │               └── service
+│   │                   └── ExpenseService.java
+└── └── resources
+        ├── application.properties
+        └── static
+            ├── app.js
+            ├── index.html
+            └── style.css
